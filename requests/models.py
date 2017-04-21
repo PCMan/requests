@@ -777,6 +777,7 @@ class Response(object):
         .. note:: This method is not reentrant safe.
         """
         pending = None
+        last_chunk_ends_with_cr = False
 
         for chunk in self.iter_content(chunk_size=chunk_size,
                                        decode_unicode=decode_unicode):
@@ -796,6 +797,12 @@ class Response(object):
             if delimiter:
                 lines = chunk.split(delimiter)
             else:
+                # Edge case: if the last chunk ends with '\r', and the current chunk starts with \n,
+                # they should be merged and treated as only "one" new line separator '\r\n'.
+                # So the first '\n' in this chunk should be skipped since it's just the second half of 
+                # the CRLF pair ('\r\n') rather than another new line break.
+                if last_chunk_ends_with_cr and chunk.startswith('\n' if decode_unicode else b'\n'):
+                    chunk = chunk[1:]
                 lines = chunk.splitlines()
 
             # Calling `.split(delimiter)` will always end with whatever text
@@ -819,6 +826,9 @@ class Response(object):
 
             for line in lines:
                 yield line
+
+            # check if the current chunk ends with '\r'
+            last_chunk_ends_with_cr = chunk.endswith('\r' if decode_unicode else b'\r')
 
         if pending is not None:
             yield pending
