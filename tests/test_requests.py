@@ -1348,7 +1348,7 @@ class TestRequests:
             # Empty chunk in the end of stream, same behavior as the previous
             (['line\r\n', ''], ['line'], ['line', '']),
             (['line', '\r\n'], ['line'], ['line', '']),
-            (['a\r', '\nb\r'], ['a', '', 'b'], ['a', 'b\r']),
+            (['a\r', '\nb\r'], ['a', 'b'], ['a', 'b\r']),
             (['a\n', '\nb'], ['a', '', 'b'], ['a\n\nb']),
             (['a\r\n','\rb\n'], ['a', '', 'b'], ['a', '\rb\n']),
             (['a\nb', 'c'], ['a', 'bc'], ['a\nbc']),
