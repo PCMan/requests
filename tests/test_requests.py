@@ -1332,7 +1332,7 @@ class TestRequests:
         assert list(r.iter_lines(delimiter=b'\r\n')) == mock_data.split(b'\r\n')
 
         # decode_unicode=True, output unicode strings
-        assert list(r.iter_lines(decode_unicode=True, delimiter='\r\n')) == unicode_mock_data.split('\r\n')
+        assert list(r.iter_lines(decode_unicode=True, delimiter=u'\r\n')) == unicode_mock_data.split(u'\r\n')
 
         # When delimiter is None, we should yield the same result as splitlines()
         # which supports the universal newline.
@@ -1360,18 +1360,18 @@ class TestRequests:
     @pytest.mark.parametrize(
         'content, expected_no_delimiter, expected_delimiter', (
             ([b''], [], []),
-            ([b'line\n'], ['line'], ['line\n']),
-            ([b'line', b'\n'], ['line'], ['line\n']),
-            ([b'line\r\n'], ['line'], ['line', '']),
+            ([b'line\n'], [u'line'], [u'line\n']),
+            ([b'line', b'\n'], [u'line'], [u'line\n']),
+            ([b'line\r\n'], [u'line'], [u'line', u'']),
             # Empty chunk in the end of stream, same behavior as the previous
-            ([b'line\r\n', b''], ['line'], ['line', '']),
-            ([b'line', b'\r\n'], ['line'], ['line', '']),
-            ([b'a\r', b'\nb\r'], ['a', 'b'], ['a', 'b\r']),
-            ([b'a\n', b'\nb'], ['a', '', 'b'], ['a\n\nb']),
-            ([b'a\r\n',b'\rb\n'], ['a', '', 'b'], ['a', '\rb\n']),
-            ([b'a\nb', b'c'], ['a', 'bc'], ['a\nbc']),
-            ([b'a\n', b'\rb', b'\r\nc'], ['a', '', 'b', 'c'], ['a\n\rb', 'c']),
-            ([b'a\r\nb', b'', b'c'], ['a', 'bc'], ['a', 'bc'])  # Empty chunk with pending data
+            ([b'line\r\n', b''], [u'line'], [u'line', u'']),
+            ([b'line', b'\r\n'], [u'line'], [u'line', u'']),
+            ([b'a\r', b'\nb\r'], [u'a', u'b'], [u'a', u'b\r']),
+            ([b'a\n', b'\nb'], [u'a', u'', u'b'], [u'a\n\nb']),
+            ([b'a\r\n',b'\rb\n'], [u'a', u'', u'b'], [u'a', u'\rb\n']),
+            ([b'a\nb', b'c'], [u'a', u'bc'], [u'a\nbc']),
+            ([b'a\n', b'\rb', b'\r\nc'], [u'a', u'', u'b', u'c'], [u'a\n\rb', u'c']),
+            ([b'a\r\nb', b'', b'c'], [u'a', u'bc'], [u'a', u'bc'])  # Empty chunk with pending data
         ))
     def test_response_lines_parametrized(self, content, expected_no_delimiter, expected_delimiter):
         """
