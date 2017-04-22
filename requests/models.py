@@ -811,6 +811,9 @@ class Response(object):
                     # is just the second half of a '\r\n' pair rather than a
                     # new line break. Just skip it.
                     chunk = chunk[1:]
+                    # it's possible that after stripping the '\n' then chunk becomes empty
+                    if not chunk:
+                        continue
                 lines = chunk.splitlines()
 
             # Calling `.split(delimiter)` will always end with whatever text
