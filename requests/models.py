@@ -815,6 +815,8 @@ class Response(object):
                     if not chunk:
                         continue
                 lines = chunk.splitlines()
+                # check if the current chunk ends with '\r'
+                last_chunk_ends_with_cr = chunk.endswith(carriage_return)
 
             # Calling `.split(delimiter)` will always end with whatever text
             # remains beyond the delimiter, or '' if the delimiter is the end
@@ -831,16 +833,12 @@ class Response(object):
             #
             # If we're using `splitlines()`, we only do this if the chunk
             # ended midway through a line.
-            incomplete_line = lines[-1] and lines[-1][-1] and lines[-1][-1] == chunk[-1]
+            incomplete_line = lines[-1] and  lines[-1][-1] == chunk[-1]
             if delimiter or incomplete_line:
                 pending = lines.pop()
 
             for line in lines:
                 yield line
-
-            # check if the current chunk ends with '\r'
-            if delimiter is None:
-                last_chunk_ends_with_cr = chunk.endswith(carriage_return)
 
         if pending is not None:
             yield pending
