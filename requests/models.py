@@ -801,10 +801,10 @@ class Response(object):
                 lines = chunk.split(delimiter)
             else:
                 # Python splitlines() supports the universal newline (PEP 278).
-                # That means, '\r', '\n', and '\r\n' are all treated as end of 
+                # That means, '\r', '\n', and '\r\n' are all treated as end of
                 # line. If the last chunk ends with '\r', and the current chunk
-                # starts with \n, they should be merged and treated as only 
-                # "one" new line separator '\r\n' by splitlines().
+                # starts with '\n', they should be merged and treated as only
+                # *one* new line separator '\r\n' by splitlines().
                 # This rule only applies when splitlines() is used.
                 if last_chunk_ends_with_cr and chunk.startswith(line_feed):
                     # The last chunk ends with '\r', so the '\n' at chunk[0]
