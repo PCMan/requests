@@ -1367,8 +1367,9 @@ class TestRequests:
             ([b'line\r\n', b''], [u'line'], [u'line', u'']),
             ([b'line', b'\r\n'], [u'line'], [u'line', u'']),
             ([b'a\r', b'\nb\r'], [u'a', u'b'], [u'a', u'b\r']),
+            ([b'a\r', b'\n', b'\nb'], [u'a', u'', u'b'], [u'a', u'\nb']),
             ([b'a\n', b'\nb'], [u'a', u'', u'b'], [u'a\n\nb']),
-            ([b'a\r\n',b'\rb\n'], [u'a', u'', u'b'], [u'a', u'\rb\n']),
+            ([b'a\r\n', b'\rb\n'], [u'a', u'', u'b'], [u'a', u'\rb\n']),
             ([b'a\nb', b'c'], [u'a', u'bc'], [u'a\nbc']),
             ([b'a\n', b'\rb', b'\r\nc'], [u'a', u'', u'b', u'c'], [u'a\n\rb', u'c']),
             ([b'a\r\nb', b'', b'c'], [u'a', u'bc'], [u'a', u'bc'])  # Empty chunk with pending data

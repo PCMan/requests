@@ -813,6 +813,7 @@ class Response(object):
                     chunk = chunk[1:]
                     # it's possible that after stripping the '\n' then chunk becomes empty
                     if not chunk:
+                        last_chunk_ends_with_cr = False
                         continue
                 lines = chunk.splitlines()
                 # check if the current chunk ends with '\r'
