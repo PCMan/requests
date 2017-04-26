@@ -806,18 +806,18 @@ class Response(object):
                 # starts with '\n', they should be merged and treated as only
                 # *one* new line separator '\r\n' by splitlines().
                 # This rule only applies when splitlines() is used.
-                if last_chunk_ends_with_cr and chunk.startswith(line_feed):
-                    # The last chunk ends with '\r', so the '\n' at chunk[0]
-                    # is just the second half of a '\r\n' pair rather than a
-                    # new line break. Just skip it.
+
+                # The last chunk ends with '\r', so the '\n' at chunk[0]
+                # is just the second half of a '\r\n' pair rather than a
+                # new line break. Just skip it.
+                skip_first_char = last_chunk_ends_with_cr and chunk.startswith(line_feed)
+                last_chunk_ends_with_cr = chunk.endswith(carriage_return)
+                if skip_first_char:
                     chunk = chunk[1:]
                     # it's possible that after stripping the '\n' then chunk becomes empty
                     if not chunk:
-                        last_chunk_ends_with_cr = False
                         continue
                 lines = chunk.splitlines()
-                # check if the current chunk ends with '\r'
-                last_chunk_ends_with_cr = chunk.endswith(carriage_return)
 
             # Calling `.split(delimiter)` will always end with whatever text
             # remains beyond the delimiter, or '' if the delimiter is the end
